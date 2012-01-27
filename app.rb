@@ -10,16 +10,15 @@ class Pinocchio < Sinatra::Base
   helpers do
     include Rack::Utils
 
+    def link_key(linkid) ; "pinocchio:links:#{linkid}" ; end
+    def stat_key(linkid) ; "#{link_key(linkid)}:clicks" ; end
+
     def random_id(length)
       rand(36**length).to_s(36)
     end
 
-    def rkey(linkid)
-      "pinocchio:links:#{linkid}"
-    end
-
     def url_for_linkid(linkid)
-      $redis.get rkey(linkid)
+      $redis.get link_key(linkid)
     end
 
     def get_links
@@ -49,7 +48,7 @@ class Pinocchio < Sinatra::Base
         linkid = random_id 5
       end
 
-      result = $redis.setnx rkey(linkid), full_url
+      result = $redis.setnx link_key(linkid), full_url
 
       if result
         add_link linkid
@@ -63,6 +62,12 @@ class Pinocchio < Sinatra::Base
 
   get '/:linkid' do
     @url = url_for_linkid params[:linkid]
-    redirect @url || '/'
+    if @url
+      $redis.incr stat_key(params[:linkid])
+      redirect @url
+    else
+      flash[:error] = "Oops - doesn't look like that link exists."
+      redirect '/'
+    end
   end
 end
