@@ -10,15 +10,13 @@ class Pinocchio < Sinatra::Base
   helpers do
     include Rack::Utils
 
+    def random_id(length) ; rand(36**length).to_s(36) ; end
+
     def link_key(linkid) ; "pinocchio:links:#{linkid}" ; end
     def stat_key(linkid) ; "#{link_key(linkid)}:clicks" ; end
 
-    def random_id(length)
-      rand(36**length).to_s(36)
-    end
-
     def url_for_linkid(linkid) ; $redis.get link_key(linkid) ; end
-    def clicks_for_linkid(linkid) ; $redis.get stat_key(linkid) ; end
+    def clicks_for_linkid(linkid) ; $redis.get(stat_key(linkid)) || 0 ; end
 
     def get_links ; session[:links].to_s.split(',') ; end
     def add_link(linkid)
@@ -54,6 +52,7 @@ class Pinocchio < Sinatra::Base
         result = $redis.setnx link_key(linkid), full_url
 
         if result
+          # add link to session
           add_link linkid
           flash.now[:success] = "Shortlink created."
         else
@@ -69,6 +68,7 @@ class Pinocchio < Sinatra::Base
 
   get '/:linkid' do
     @url = url_for_linkid params[:linkid]
+
     if @url
       $redis.incr stat_key(params[:linkid])
       redirect @url
