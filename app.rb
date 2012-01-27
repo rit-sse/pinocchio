@@ -1,6 +1,6 @@
 class Pinocchio < Sinatra::Base
   $redis = Redis.new
-  PAGE_SIZE = 5.0
+  PAGE_SIZE = 15.0
 
   configure do
     enable :sessions
