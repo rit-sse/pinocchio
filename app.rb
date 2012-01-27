@@ -4,6 +4,7 @@ class Pinocchio < Sinatra::Base
   configure do
     enable :sessions
     set :session_secret, "uOj0YBCsVKNMeI6xOfLXgxJYZaGLwA"
+    register Sinatra::Flash
   end
 
   helpers do
@@ -39,10 +40,23 @@ class Pinocchio < Sinatra::Base
   end
 
   post '/' do
-    if params[:url] and !params[:url].empty?
-      linkid = random_id 5
-      $redis.setnx rkey(linkid), params[:url]
-      add_link linkid
+    unless params[:url].to_s.empty?
+      full_url = params[:url].strip
+
+      unless params[:vanityname].to_s.empty?
+        linkid = params[:vanityname].strip
+      else
+        linkid = random_id 5
+      end
+
+      result = $redis.setnx rkey(linkid), full_url
+
+      if result
+        add_link linkid
+        flash.now[:success] = "Shortlink created."
+      else
+        flash.now[:error] = "Key already exists. Make sure your vanity name is unique."
+      end
     end
     erb :index
   end
