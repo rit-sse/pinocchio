@@ -60,8 +60,9 @@
       <table class="table table-bordered table-striped">
         <thead>
           <tr>
-            <th>Short URL</th>
-            <th>Full URL</th>
+            <th class="short-url-col">Short URL</th>
+            <th class="full-url-col">Full URL</th>
+            <th class="clicks-col">Clicks</th>
           </tr>
         </thead>
         <tbody>
@@ -69,6 +70,7 @@
           <tr>
             <td><a href="/<%= linkid %>"><%= url "/#{linkid}" %></a></td>
             <td><a href="<%= full_url %>"><%= full_url %></a></td>
+            <td class="right"><%= clicks_for_linkid linkid %></td>
           </tr>
         <% end %>
         </tbody>

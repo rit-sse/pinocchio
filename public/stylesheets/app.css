@@ -18,8 +18,16 @@ input[type=submit] {
     font-size: 45px;
 }
 
-.result {
-    margin: 20px 0;
+table .short-url-col {
+    width: 25%;
+}
+table .full-url-col {
+    /* width: 33%;*/
+}
+table .clicks-col {
+    width: 50px;
+    text-align: right;
 }
 
-.right { text-align: right; }
+.right { text-align: right !important; }
+

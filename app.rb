@@ -17,14 +17,10 @@ class Pinocchio < Sinatra::Base
       rand(36**length).to_s(36)
     end
 
-    def url_for_linkid(linkid)
-      $redis.get link_key(linkid)
-    end
+    def url_for_linkid(linkid) ; $redis.get link_key(linkid) ; end
+    def clicks_for_linkid(linkid) ; $redis.get stat_key(linkid) ; end
 
-    def get_links
-      session[:links].to_s.split(',')
-    end
-
+    def get_links ; session[:links].to_s.split(',') ; end
     def add_link(linkid)
       unless session[:links].to_s.empty?
         session[:links] << ",#{linkid}"
@@ -41,22 +37,33 @@ class Pinocchio < Sinatra::Base
   post '/' do
     unless params[:url].to_s.empty?
       full_url = params[:url].strip
+      valid_id = true
 
+      # grab or generate link id
       unless params[:vanityname].to_s.empty?
         linkid = params[:vanityname].strip
+
+        # validate vanity names
+        valid_id = linkid.match /^[\w-]+$/i
       else
         linkid = random_id 5
       end
 
-      result = $redis.setnx link_key(linkid), full_url
+      if valid_id
+        # set if key doesn't already exist
+        result = $redis.setnx link_key(linkid), full_url
 
-      if result
-        add_link linkid
-        flash.now[:success] = "Shortlink created."
+        if result
+          add_link linkid
+          flash.now[:success] = "Shortlink created."
+        else
+          flash.now[:error] = "Key already exists. Make sure your vanity name is unique."
+        end
       else
-        flash.now[:error] = "Key already exists. Make sure your vanity name is unique."
+        flash.now[:error] = "Invalid vanity name. Must contain only alphanumeric characters, dashes, and underscores."
       end
     end
+
     erb :index
   end
 
