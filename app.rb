@@ -20,7 +20,7 @@ class Pinocchio < Sinatra::Base
 
     def get_links
       if params[:all] == "true"
-        ($redis.lrange "pinocchio:alllinks", 0, -1) || []
+        (($redis.lrange "pinocchio:alllinks", 0, -1) || []).reverse
       else
         session[:links].to_s.split(',').reverse
       end
