@@ -1,9 +1,11 @@
 class Pinocchio < Sinatra::Base
   $redis = Redis.new
+  PAGE_SIZE = 5.0
 
   configure do
     enable :sessions
     set :session_secret, "uOj0YBCsVKNMeI6xOfLXgxJYZaGLwA"
+
     register Sinatra::Flash
   end
 
@@ -18,11 +20,47 @@ class Pinocchio < Sinatra::Base
     def url_for_linkid(linkid) ; $redis.get link_key(linkid) ; end
     def clicks_for_linkid(linkid) ; $redis.get(stat_key(linkid)) || 0 ; end
 
-    def get_links
+    def url_for_paginated_page(page)
+      the_url = "/?page=#{page}#{'&all=true' if params[:all] == 'true'}"
+    end
+    def prev_page_url
+      return "#" if prev_page_url_disabled?
+      url_for_paginated_page(params[:page].to_i - 1)
+    end
+    def next_page_url
+      return "#" if next_page_url_disabled?
+      url_for_paginated_page(params[:page].to_i + 1)
+    end
+    def prev_page_url_disabled?
+      (0..1).include? params[:page].to_i
+    end
+    def next_page_url_disabled?
+      params[:page].to_i == (@link_count / PAGE_SIZE).ceil
+    end
+    def paginate
+      @link_count ||= link_count
+
+      (1..(@link_count / PAGE_SIZE).ceil).each do |i|
+        yield i if block_given?
+      end
+    end
+    def link_count
       if params[:all] == "true"
-        (($redis.lrange "pinocchio:alllinks", 0, -1) || []).reverse
+        $redis.llen "pinocchio:alllinks"
       else
-        session[:links].to_s.split(',').reverse
+        session[:links].to_s.split(',').length
+      end
+    end
+    def get_links
+      page = params[:page].to_i
+      page -= 1 if page >= 1
+      startindex = page * PAGE_SIZE
+      endindex = startindex + PAGE_SIZE - 1
+
+      if params[:all] == "true"
+        $redis.lrange "pinocchio:alllinks", startindex, endindex
+      else
+        session[:links].to_s.split(',').reverse[startindex..endindex]
       end
     end
     def add_link(linkid)
@@ -34,7 +72,7 @@ class Pinocchio < Sinatra::Base
       end
 
       # add link to pinochio collection
-      $redis.rpush "pinocchio:alllinks", linkid
+      $redis.lpush "pinocchio:alllinks", linkid
     end
   end
 

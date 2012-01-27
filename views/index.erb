@@ -56,7 +56,7 @@
 
     </form>
 
-<% unless get_links.empty? %>
+<%# <% unless get_links.empty? %>
     <div class="result">
       <table class="table table-bordered table-striped">
         <thead>
@@ -76,8 +76,20 @@
         <% end %>
         </tbody>
       </table>
+
+      <%= @link_count %>
+      <div class="pagination">
+        <ul>
+          <li class="<%= 'disabled' if prev_page_url_disabled? %>"><a href="<%= prev_page_url %>">←</a></li>
+          <% paginate do |i| %>
+            <li class="<%= 'disabled' if i == params[:page].to_i %>"><a href="<%= url_for_paginated_page i %>"><%= i %></a></li>
+          <% end %>
+          <li class="<%= 'disabled' if next_page_url_disabled? %>"><a href="<%= next_page_url %>">→</a></li>
+        </ul>
+      </div>
+
     </div>
-<% end %>
+<%# <% end %>
 
   </div>
 </body>
