@@ -22,7 +22,7 @@ class Pinocchio < Sinatra::Base
       if params[:all] == "true"
         ($redis.lrange "pinocchio:alllinks", 0, -1) || []
       else
-        session[:links].to_s.split(',')
+        session[:links].to_s.split(',').reverse
       end
     end
     def add_link(linkid)
