@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" media="all" href="/stylesheets/bootstrap.min.css" />
+  <link rel="stylesheet" media="all" href="/stylesheets/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" media="all" href="/stylesheets/app.css" />
+
+  <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+  <script type="text/javascript" src="/javascripts/bootstrap-tab.js"></script>
+
+  <title>Pinocchio</title>
+</head>
+<body>
+  <div class="container">
+
+    <h1 id="title">Pinocchio</h1>
+
+    <form method="post">
+
+      <!--
+      <div class="tabbable">
+        <ul class="nav tabs">
+          <li class="active"><a href="#regular" data-toggle="tab">Regular Shortener</a></li>
+          <li><a href="#vanity" data-toggle="tab">Vanity URL Shortener</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="regular">
+            <div class="row">
+              <div class="span12">
+                <input type="text" value="<%= escape_html(params[:url]) %>" 
+                  name="url" id="url" placeholder="http://example.com" class="span12" />
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="vanity">
+            -->
+
+            <div class="row">
+              <div class="span8">
+                <label for="url">URL to shorten</label>
+                <input type="text" value="<%= escape_html(params[:url]) %>"
+                  name="url" id="url" placeholder="http://example.com" class="span8" />
+              </div>
+              <div class="span4">
+                <label for="vanitylink">Vanity link name</label>
+                <input type="text" value="<%= escape_html(params[:url]) %>" 
+                  name="vanitylink" id="vanitylink" placeholder="foo" class="span4" />
+              </div>
+            </div>
+
+            <!--
+          </div>
+        </div>
+      </div>
+      -->
+
+      <div class="row">
+        <div class="span2 offset10 right">
+          <input type="submit" value="Shorten" id="submit" class="primary btn" />
+        </div>
+      </div>
+
+    </form>
+
+<% unless get_links.empty? %>
+    <div class="result">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Short URL</th>
+            <th>Full URL</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% get_links.each do |linkid| %><% full_url = url_for_linkid linkid %>
+          <tr>
+            <td><a href="/<%= linkid %>"><%= url "/#{linkid}" %></a></td>
+            <td><a href="<%= full_url %>"><%= full_url %></a></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>
+
+  </div>
+</body>
+</html>
