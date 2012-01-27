@@ -18,13 +18,23 @@ class Pinocchio < Sinatra::Base
     def url_for_linkid(linkid) ; $redis.get link_key(linkid) ; end
     def clicks_for_linkid(linkid) ; $redis.get(stat_key(linkid)) || 0 ; end
 
-    def get_links ; session[:links].to_s.split(',') ; end
+    def get_links
+      if params[:all] == "true"
+        ($redis.lrange "pinocchio:alllinks", 0, -1) || []
+      else
+        session[:links].to_s.split(',')
+      end
+    end
     def add_link(linkid)
+      # add link to session
       unless session[:links].to_s.empty?
         session[:links] << ",#{linkid}"
       else
         session[:links] = linkid
       end
+
+      # add link to pinochio collection
+      $redis.rpush "pinocchio:alllinks", linkid
     end
   end
 
