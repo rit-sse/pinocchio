@@ -82,7 +82,7 @@
         <ul>
           <li class="<%= 'disabled' if prev_page_url_disabled? %>"><a href="<%= prev_page_url %>">← Prev</a></li>
           <% paginate do |i| %>
-            <li class="<%= 'disabled' if i == params[:page].to_i %>"><a href="<%= url_for_paginated_page i %>"><%= i %></a></li>
+            <li class="<%= 'disabled' if page_url_disabled? i %>"><a href="<%= url_for_paginated_page i %>"><%= i %></a></li>
           <% end %>
           <li class="<%= 'disabled' if next_page_url_disabled? %>"><a href="<%= next_page_url %>">Next →</a></li>
         </ul>
