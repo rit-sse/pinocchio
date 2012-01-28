@@ -36,7 +36,7 @@ class Pinocchio < Sinatra::Base
       (0..1).include? params[:page].to_i
     end
     def next_page_url_disabled?
-      params[:page].to_i == (@link_count / PAGE_SIZE).ceil
+      params[:page].to_i == (@link_count / PAGE_SIZE).ceil || @link_count <= PAGE_SIZE
     end
     def page_url_disabled?(index)
       params[:page].to_i == index || (params[:page].to_i == 0 && index == 1)
@@ -50,9 +50,9 @@ class Pinocchio < Sinatra::Base
     end
     def link_count
       if params[:all] == "true"
-        $redis.llen "pinocchio:alllinks"
+        @link_count = $redis.llen "pinocchio:alllinks"
       else
-        session[:links].to_s.split(',').length
+        @link_count = session[:links].to_s.split(',').length
       end
     end
     def get_links
