@@ -12,6 +12,8 @@ class Pinocchio < Sinatra::Base
   helpers do
     include Rack::Utils
 
+    def asset_path ; request.path == '/' ? '' : request.path ; end
+
     def random_id(length) ; rand(36**length).to_s(36) ; end
 
     def link_key(linkid) ; "pinocchio:links:#{linkid}" ; end

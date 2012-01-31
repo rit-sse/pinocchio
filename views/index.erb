@@ -10,14 +10,14 @@
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" media="all" href="/stylesheets/bootstrap.min.css" />
-  <link rel="stylesheet" media="all" href="/stylesheets/bootstrap-responsive.min.css" />
-  <link rel="stylesheet" media="all" href="/stylesheets/app.css" />
+  <link rel="stylesheet" media="all" href="<%= asset_path %>/stylesheets/bootstrap.min.css" />
+  <link rel="stylesheet" media="all" href="<%= asset_path %>/stylesheets/bootstrap-responsive.min.css" />
+  <link rel="stylesheet" media="all" href="<%= asset_path %>/stylesheets/app.css" />
 
-  <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
-  <script type="text/javascript" src="/javascripts/bootstrap-tab.js"></script>
-  <script type="text/javascript" src="/javascripts/bootstrap-alert.js"></script>
-  <script type="text/javascript" src="/javascripts/app.js"></script>
+  <script type="text/javascript" src="<%= asset_path %>/javascripts/jquery.min.js"></script>
+  <script type="text/javascript" src="<%= asset_path %>/javascripts/bootstrap-tab.js"></script>
+  <script type="text/javascript" src="<%= asset_path %>/javascripts/bootstrap-alert.js"></script>
+  <script type="text/javascript" src="<%= asset_path %>/javascripts/app.js"></script>
 
   <title>Pinocchio</title>
 </head>
@@ -69,7 +69,7 @@
         <tbody>
         <% get_links.each do |linkid| %><% full_url = url_for_linkid linkid %>
           <tr>
-            <td><a href="/<%= linkid %>"><%= url "/#{linkid}" %></a></td>
+            <td><a href="<%= "#{asset_path}/#{linkid}" %>"><%= url "#{asset_path}/#{linkid}" %></a></td>
             <td><a href="<%= full_url %>"><%= full_url %></a></td>
             <td class="right"><%= clicks_for_linkid linkid %></td>
           </tr>
