@@ -6,8 +6,6 @@
 # deploying, oddly enough...
 bundle install --quiet --binstubs --shebang ruby-local-exec
 
-RAILS_ENV=production rake db:create
-
 # make our directories and symlinks
 rm -rf "$APP_DIR/tmp/pids" "$APP_DIR/log"
 mkdir -p "$APP_SHARED/sockets"

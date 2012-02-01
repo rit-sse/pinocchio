@@ -6,9 +6,6 @@
 # deploying, oddly enough...
 bundle install --quiet --binstubs --shebang ruby-local-exec
 
-RAILS_ENV=production bundle exec rake assets:precompile --trace
-RAILS_ENV=production rake db:migrate
-
 # gracefully reload app with unicorn magic
 pid=/home/deploy/pinocchio/tmp/pids/unicorn.pid
 test -s $pid && kill -s USR2 "$(cat $pid)"
