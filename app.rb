@@ -1,4 +1,9 @@
+require 'sinatra/base'
+
 class Pinocchio < Sinatra::Base
+  require 'redis'
+  require 'sinatra/flash'
+
   $redis = Redis.new
   PAGE_SIZE = 15.0
 
@@ -128,7 +133,7 @@ class Pinocchio < Sinatra::Base
       redirect @url
     else
       flash[:error] = "Oops - doesn't look like that link exists."
-      redirect '/'
+      redirect url('/')
     end
   end
 end
