@@ -1,8 +1,6 @@
 defaults: &defaults
   domain: "sse.se.rit.edu"
   repository: "https://github.com/codykrieger/pinocchio.git"
-  rake_env:
-    #RAILS_ENV: 'production'
 
 staging:
   <<: *defaults
