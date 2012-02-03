@@ -85,6 +85,14 @@ class Pinocchio < Sinatra::Base
       # add link to pinochio collection
       $redis.lpush "pinocchio:alllinks", linkid
     end
+    def remove_link(linkid)
+      $redis.del "pinocchio:links:#{params[:linkid]}"
+      $redis.lrem "pinocchio:alllinks", 0, params[:linkid]
+      session[:links].gsub! linkid, ''
+      session[:links].gsub! /[,]+/, ','
+      session[:links].gsub! /^[,]+/, ''
+      session[:links].gsub! /[,]+$/, ''
+    end
   end
 
   get "/" do
@@ -135,5 +143,11 @@ class Pinocchio < Sinatra::Base
       flash[:error] = "Oops - doesn't look like that link exists."
       redirect url('/')
     end
+  end
+
+  post '/:linkid' do
+    remove_link params[:linkid]
+    flash[:success] = "Shortlink deleted."
+    redirect url("/")
   end
 end

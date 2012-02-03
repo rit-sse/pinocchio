@@ -31,3 +31,8 @@ table .clicks-col {
 
 .right { text-align: right !important; }
 
+table .action-column { width: 40px; }
+table .action-column .btn-small { padding: 0 6px; }
+
+.alert .close { float: right; }
+

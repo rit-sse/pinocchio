@@ -11,12 +11,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" media="all" href="<%= url "/stylesheets/bootstrap.min.css" %>" />
-  <link rel="stylesheet" media="all" href="<%= url "/stylesheets/bootstrap-responsive.min.css" %>" />
   <link rel="stylesheet" media="all" href="<%= url "/stylesheets/app.css" %>" />
 
   <script type="text/javascript" src="<%= url "/javascripts/jquery.min.js" %>"></script>
-  <script type="text/javascript" src="<%= url "/javascripts/bootstrap-tab.js" %>"></script>
-  <script type="text/javascript" src="<%= url "/javascripts/bootstrap-alert.js" %>"></script>
+  <script type="text/javascript" src="<%= url "/javascripts/jquery_ujs.js" %>"></script>
+  <script type="text/javascript" src="<%= url "/javascripts/bootstrap.min.js" %>"></script>
   <script type="text/javascript" src="<%= url "/javascripts/app.js" %>"></script>
 
   <title>Pinocchio</title>
@@ -27,8 +26,8 @@
     <h1 id="title">Pinocchio</h1>
 
     <% flash("flash").collect do |f| %>
-      <div class="alert alert-<%= f[0] %>">
-        <a class="close" data-dismiss="alert" href="#">×</a>
+      <div class="alert alert-<%= f[0] %> fade in">
+        <a class="close" data-dismiss="alert" href="#">x</a>
         <%= f[1] %>
       </div>
     <% end %>
@@ -50,7 +49,7 @@
 
       <div class="row">
         <div class="span2 offset10 right">
-          <input type="submit" value="Shorten" id="submit" class="primary btn" />
+          <input type="submit" value="Shorten" id="submit" class="btn btn-primary" />
         </div>
       </div>
 
@@ -64,6 +63,9 @@
             <th class="short-url-col">Short URL</th>
             <th class="full-url-col">Full URL</th>
             <th class="clicks-col">Clicks</th>
+            <% if params[:all] == 'true' %>
+            <th class="action-column"></th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -72,12 +74,15 @@
             <td><a href="<%= url "/#{linkid}" %>"><%= url "/#{linkid}" %></a></td>
             <td><a href="<%= full_url %>"><%= full_url %></a></td>
             <td class="right"><%= clicks_for_linkid linkid %></td>
+            <% if params[:all] == 'true' %>
+            <td class="action-column"><a class="btn btn-danger btn-small" rel="nofollow" href="<%= url "/#{linkid}" %>" data-method="delete" data-confirm="Are you sure?">Delete</a></td>
+            <% end %>
           </tr>
         <% end %>
         </tbody>
       </table>
 
-      <%= link_count %>
+      <strong><%= link_count %> total shortlinks</strong>.
       <div class="pagination">
         <ul>
           <li class="<%= 'disabled' if prev_page_url_disabled? %>"><a href="<%= prev_page_url %>">← Prev</a></li>
