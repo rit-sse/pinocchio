@@ -28,7 +28,7 @@ class Pinocchio < Sinatra::Base
     def clicks_for_linkid(linkid) ; $redis.get(stat_key(linkid)) || 0 ; end
 
     def url_for_paginated_page(page)
-      the_url = "/?page=#{page}#{'&all=true' if params[:all] == 'true'}"
+      the_url = "/?page=#{page}"
     end
     def prev_page_url
       return "#" if prev_page_url_disabled?
@@ -56,7 +56,7 @@ class Pinocchio < Sinatra::Base
       end
     end
     def link_count
-      if params[:all] == "true"
+      if @admin
         @link_count = $redis.llen "pinocchio:alllinks"
       else
         @link_count = session[:links].to_s.split(',').length
@@ -68,7 +68,7 @@ class Pinocchio < Sinatra::Base
       startindex = page * PAGE_SIZE
       endindex = startindex + PAGE_SIZE - 1
 
-      if params[:all] == "true"
+      if @admin
         $redis.lrange "pinocchio:alllinks", startindex, endindex
       else
         session[:links].to_s.split(',').reverse[startindex..endindex]
@@ -94,6 +94,8 @@ class Pinocchio < Sinatra::Base
       session[:links].gsub! /[,]+$/, ''
     end
   end
+
+  before { @admin = !request.cookies['_wtf_authenticated'].nil?  }
 
   get "/" do
     erb :index

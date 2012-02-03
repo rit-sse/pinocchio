@@ -62,7 +62,7 @@
             <th class="short-url-col">Short URL</th>
             <th class="full-url-col">Full URL</th>
             <th class="clicks-col">Clicks</th>
-            <% if params[:all] == 'true' %>
+            <% if @admin %>
             <th class="action-column"></th>
             <% end %>
           </tr>
@@ -73,7 +73,7 @@
             <td><a href="<%= url "/#{linkid}" %>"><%= url "/#{linkid}" %></a></td>
             <td><a href="<%= full_url %>"><%= full_url %></a></td>
             <td class="right"><%= clicks_for_linkid linkid %></td>
-            <% if params[:all] == 'true' %>
+            <% if @admin %>
             <td class="action-column"><a class="btn btn-danger btn-small" rel="nofollow" href="<%= url "/#{linkid}" %>" data-method="delete" data-confirm="Are you sure?">Delete</a></td>
             <% end %>
           </tr>
