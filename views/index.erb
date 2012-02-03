@@ -55,7 +55,6 @@
 
     </form>
 
-<%# <% unless get_links.empty? %>
     <div class="result">
       <table class="table table-bordered table-striped">
         <thead>
@@ -94,8 +93,22 @@
       </div>
 
     </div>
-<%# <% end %>
 
   </div>
+  <% if request.url.match /sse\.se\.rit\.edu/ %>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-28899218-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+  <% end %>
 </body>
 </html>
