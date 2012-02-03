@@ -101,7 +101,7 @@ class Pinocchio < Sinatra::Base
     end
   end
 
-  before { @admin = !request.cookies['_wtf_authenticated'].nil?  }
+  before { @admin = !session[:user].nil?  }
 
   get "/" do
     erb :index
