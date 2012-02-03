@@ -8,15 +8,17 @@ class Pinocchio < Sinatra::Base
   PAGE_SIZE = 15.0
 
   configure do
-    secret_file_path = "#{root}/../session_key"
-    if File.exist? secret_file_path
-      secret_key = File.read secret_file_path
-    else
-      secret_key = "Ouppvx4UKRIJ7zHCDuFEYh7IOwaJ3dIClmROlIzj5Y5RkSVeN2CIZMOar6FxwYL"
-    end
-    use Rack::Session::Cookie, key: "_sse_session",
-                               path: '/',
-                               secret: secret_key
+    # secret_file_path = "#{root}/../session_key"
+    # if File.exist? secret_file_path
+    #   secret_key = File.read secret_file_path
+    # else
+    #   secret_key = "Ouppvx4UKRIJ7zHCDuFEYh7IOwaJ3dIClmROlIzj5Y5RkSVeN2CIZMOar6FxwYL"
+    # end
+    # use Rack::Session::Cookie, key: "_sse_session",
+    #                            path: '/',
+    #                            secret: secret_key
+
+    use ActionDispatch::Session::CookieStore
     register Sinatra::Flash
   end
 
