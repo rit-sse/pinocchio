@@ -44,10 +44,13 @@ module Helpers
     def remove_link(linkid)
       $redis.del "pinocchio:links:#{params[:linkid]}"
       $redis.lrem "pinocchio:alllinks", 0, params[:linkid]
-      session[:links].gsub! linkid, ''
-      session[:links].gsub! /[,]+/, ','
-      session[:links].gsub! /^[,]+/, ''
-      session[:links].gsub! /[,]+$/, ''
+
+      if session[:links]
+        session[:links].gsub! linkid, ''
+        session[:links].gsub! /[,]+/, ','
+        session[:links].gsub! /^[,]+/, ''
+        session[:links].gsub! /[,]+$/, ''
+      end
     end
   end
 end
