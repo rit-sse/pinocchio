@@ -17,7 +17,7 @@ class Pinocchio < Sinatra::Base
     include Helpers::All
   end
 
-  before { @admin = !session[:user].nil? || request.host.end_with? ".dev" }
+  before { @admin = !session[:user].nil? || request.host.end_with?(".dev") }
 
   get "/" do
     erb :index
