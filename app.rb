@@ -17,7 +17,7 @@ class Pinocchio < Sinatra::Base
     include Helpers::All
   end
 
-  before { @admin = !session[:user].nil?  }
+  before { @admin = !session[:user].nil? || request.host.end_with? ".dev" }
 
   get "/" do
     erb :index
@@ -69,9 +69,12 @@ class Pinocchio < Sinatra::Base
     end
   end
 
-  post '/:linkid' do
-    remove_link params[:linkid]
-    fl[:success] = "Shortlink deleted."
+  post '/:linkid/delete' do
+    if @admin
+      remove_link params[:linkid]
+      fl[:success] = "Shortlink deleted."
+    end
+
     redirect url("/")
   end
 end
