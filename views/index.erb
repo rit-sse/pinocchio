@@ -25,7 +25,7 @@
 
     <h1 id="title">Pinocchio</h1>
 
-    <% flash("flash").collect do |f| %>
+    <% fl.collect do |f| %>
       <div class="alert alert-<%= f[0] %> fade in">
         <a class="close" data-dismiss="alert" href="#">x</a>
         <%= f[1] %>

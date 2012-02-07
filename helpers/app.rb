@@ -1,5 +1,11 @@
 module Helpers
   module App
+    # flash
+
+    def fl
+      flash(:pinocchio_flash)
+    end
+
     # pagination
 
     def url_for_paginated_page(page)

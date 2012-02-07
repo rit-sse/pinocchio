@@ -45,12 +45,12 @@ class Pinocchio < Sinatra::Base
         if result
           # add link to session
           add_link linkid
-          flash.now[:success] = "Shortlink created."
+          fl.now[:success] = "Shortlink created."
         else
-          flash.now[:error] = "Key already exists. Make sure your vanity name is unique."
+          fl.now[:error] = "Key already exists. Make sure your vanity name is unique."
         end
       else
-        flash.now[:error] = "Invalid vanity name. Must contain only alphanumeric characters, dashes, and underscores."
+        fl.now[:error] = "Invalid vanity name. Must contain only alphanumeric characters, dashes, and underscores."
       end
     end
 
@@ -64,14 +64,14 @@ class Pinocchio < Sinatra::Base
       $redis.incr stat_key(params[:linkid])
       redirect @url
     else
-      flash[:error] = "Oops - doesn't look like that link exists."
+      fl[:error] = "Oops - doesn't look like that link exists."
       redirect url('/')
     end
   end
 
   post '/:linkid' do
     remove_link params[:linkid]
-    flash[:success] = "Shortlink deleted."
+    fl[:success] = "Shortlink deleted."
     redirect url("/")
   end
 end
