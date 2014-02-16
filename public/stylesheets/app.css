@@ -36,3 +36,6 @@ table .action-column .btn-small { padding: 0 6px; }
 
 .alert .close { float: right; }
 
+.important-form-field {
+    display: none;
+}
