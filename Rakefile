@@ -1,8 +1,8 @@
 namespace :server do
 
   task :start do
-    if File.exists?(Rails.root.join('tmp/pids/unicorn.pid'))
-      pid = File.read(Rails.root.join('tmp/pids/unicorn.pid')).to_i
+    if File.exists?('tmp/pids/unicorn.pid')
+      pid = File.read('tmp/pids/unicorn.pid').to_i
       Process.kill("HUP", pid)
       puts 'Restarted the server'
     else
@@ -12,8 +12,8 @@ namespace :server do
   end
 
   task :stop do
-    if File.exists?(Rails.root.join('tmp/pids/unicorn.pid'))
-      pid = File.read(Rails.root.join('tmp/pids/unicorn.pid')).to_i
+    if File.exists?('tmp/pids/unicorn.pid')
+      pid = File.read('tmp/pids/unicorn.pid').to_i
       Process.kill("QUIT", pid)
       puts 'Stopped the server'
     else
