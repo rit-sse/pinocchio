@@ -12,7 +12,8 @@ map "/go" do
     secret_key = File.read secret_file_path
   end
   use Rack::Session::Cookie, key: "_sse_session",
-                             secret: secret_key
+                             secret: secret_key,
+                             domain: '.sofse.org'
 
   run Pinocchio
 end
