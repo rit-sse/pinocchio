@@ -17,3 +17,5 @@ pid "#{@dir}tmp/pids/unicorn.pid"
 # Set log file paths
 stderr_path "#{@dir}log/unicorn.stderr.log"
 stdout_path "#{@dir}log/unicorn.stdout.log"
+
+preload_app true
