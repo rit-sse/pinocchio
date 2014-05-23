@@ -3,6 +3,7 @@ source 'http://rubygems.org'
 gem 'sinatra', require: "sinatra/base"
 gem 'redis'
 gem 'sinatra-flash'
+gem 'redis-rack'
 
 group :production do
   gem 'unicorn'
