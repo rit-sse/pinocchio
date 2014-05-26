@@ -4,9 +4,10 @@ class Pinocchio < Sinatra::Base
   require 'redis'
   require 'sinatra/flash'
   require File.expand_path("../helpers/all", __FILE__)
+  enable :sessions
 
   $redis = Redis.new
-  $PAGE_SIZE = 15.0
+  $PAGE_SIZE = 15
 
   configure do
     register Sinatra::Flash
@@ -17,14 +18,78 @@ class Pinocchio < Sinatra::Base
     include Helpers::All
   end
 
-  before { @admin = !session[:user].nil? }
-
   get "/" do
     erb :index
   end
 
+  post "/auth" do
+    if ENV['RACK_ENV'] == 'development' and
+      params[:username] == "admin" and
+      params[:password] == "admin"
+
+      set_current_user "admin", "admin"
+
+      fl[:success] = "Logged in successfully."
+      redirect url("/")
+    else
+      username = params[:username]
+      username = username[/\A\w+/].downcase
+      user = username + "@ad.sofse.org"
+      psw = params[:password]
+      authorized = false
+
+      ldap = Net::LDAP.new host: "dc1.ad.sofse.org",
+           port: 389,
+           auth: {
+                 method: :simple,
+                 username: user,
+                 password: psw
+           }
+
+      filter = Net::LDAP::Filter.eq("mail", "*")
+      treebase = "OU=Officers,OU=Users,OU=SOFSE,DC=ad,DC=sofse,DC=org"
+
+      officers = []
+      ldap.search(base: treebase, filter: filter) do |entry|
+        officers << entry.mail.first.split("@").first
+      end
+
+      if officers.include?(username)
+        authorized = true
+      end
+
+      error_notice = nil
+
+      if authorized
+
+        username = user
+        role = "admin"
+
+        set_current_user username, role
+        fl[:success] = "Logged in successfully."
+        redirect url("/")
+      else
+        if ldap
+          error_notice = "Insufficient Privileges"
+        else
+          error_notice = "Error: #{ldap.get_operation_result.message}"
+        end
+      end
+
+      if error_notice
+        fl[:error] = error_notice
+        erb :index
+      end
+    end
+  end
+
+  post '/logout' do
+    session.clear
+    fl[:success] = "Logged out successfully"
+    redirect url('/')
+  end
+
   post '/' do
-    
     if !params[:name].to_s.empty?
       fl.now[:error] = "Stop spamming"
     else
@@ -77,7 +142,7 @@ class Pinocchio < Sinatra::Base
   end
 
   post '/:linkid/delete' do
-    if @admin
+    if signed_in?
       remove_link params[:linkid]
       fl[:success] = "Shortlink deleted."
     end

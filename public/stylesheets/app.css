@@ -3,7 +3,7 @@
  * by Cody Krieger
  */
 
-input[type=text] {
+input.text {
     font-size: 30px;
     height: 40px;
 }

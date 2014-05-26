@@ -4,6 +4,7 @@ gem 'sinatra', require: "sinatra/base"
 gem 'redis'
 gem 'sinatra-flash'
 gem 'redis-rack'
+gem 'net-ldap'
 
 group :production do
   gem 'unicorn'

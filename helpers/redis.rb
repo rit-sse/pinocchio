@@ -9,7 +9,7 @@ module Helpers
     def clicks_for_linkid(linkid) ; $redis.get(stat_key(linkid)) || 0 ; end
 
     def link_count
-      if @admin
+      if signed_in?
         @link_count = $redis.llen "pinocchio:alllinks"
       else
         @link_count = session[:links].to_s.split(',').length
@@ -22,7 +22,7 @@ module Helpers
       startindex = page * $PAGE_SIZE
       endindex = startindex + $PAGE_SIZE - 1
 
-      if @admin
+      if signed_in?
         $redis.lrange "pinocchio:alllinks", startindex, endindex
       else
         session[:links].to_s.split(',').reverse[startindex..endindex]

@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     kgio (2.7.2)
+    net-ldap (0.3.1)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -32,6 +33,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  net-ldap
   redis
   redis-rack
   sinatra

@@ -22,8 +22,20 @@
 </head>
 <body>
   <div class="container">
+    <% if signed_in? %>
+      <form method="post" class="form-inline pull-right" style="margin: 30px;" action="/go/logout">
+        <button type="submit" id="submit" class="btn">Sign Out</button>
+      </form>
+    <% else %>
+      <form method="post" class="form-inline pull-right" style="margin: 30px;" action="/go/auth">
+        <input type="text" class="input-small" placeholder="Username" name="username" id="username">
+        <input type="password" class="input-small" placeholder="Password" name="password" id="password">
+        <button type="submit" id="submit" class="btn">Sign in</button>
+      </form>
+    <% end %>
 
-    <h1 id="title">Pinocchio</h1>
+
+    <h1 id="title" class=>Pinocchio</h1>
 
     <% fl.collect do |f| %>
       <div class="alert alert-<%= f[0] %> fade in">
@@ -32,18 +44,20 @@
       </div>
     <% end %>
 
+
+
     <form method="post">
 
       <div class="row">
         <div class="span8">
           <label for="url">URL to shorten</label>
           <input type="text" value="<%= escape_html(params[:url]) %>"
-            name="url" id="url" placeholder="http://example.com" class="span8" />
+            name="url" id="url" placeholder="http://example.com" class="span8 text" />
         </div>
         <div class="span4">
           <label for="vanityname">Vanity link name</label>
-          <input type="text" value="<%= escape_html(params[:vanityname]) %>" 
-            name="vanityname" id="vanityname" placeholder="foo" class="span4" />
+          <input type="text" value="<%= escape_html(params[:vanityname]) %>"
+            name="vanityname" id="vanityname" placeholder="foo" class="span4 text" />
         </div>
       </div>
 
@@ -69,7 +83,7 @@
             <th class="short-url-col">Short URL</th>
             <th class="full-url-col">Full URL</th>
             <th class="clicks-col">Clicks</th>
-            <% if @admin %>
+            <% if signed_in? %>
             <th class="action-column"></th>
             <% end %>
           </tr>
@@ -80,7 +94,7 @@
             <td><a href="<%= url "/#{linkid}" %>"><%= url "/#{linkid}" %></a></td>
             <td><a href="<%= full_url %>"><%= full_url %></a></td>
             <td class="right"><%= clicks_for_linkid linkid %></td>
-            <% if @admin %>
+            <% if signed_in? %>
             <td class="action-column"><a class="btn btn-danger btn-small" rel="nofollow" href="<%= url "/#{linkid}/delete" %>" data-method="delete" data-confirm="Are you sure?">Delete</a></td>
             <% end %>
           </tr>
