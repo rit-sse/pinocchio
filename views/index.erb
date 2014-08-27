@@ -51,12 +51,12 @@
       <div class="row">
         <div class="span8">
           <label for="url">URL to shorten</label>
-          <input type="text" value="<%= escape_html(params[:url]) %>"
+          <input id="big" type="text" value="<%= escape_html(params[:url]) %>"
             name="url" id="url" placeholder="http://example.com" class="span8 text" />
         </div>
         <div class="span4">
           <label for="vanityname">Vanity link name</label>
-          <input type="text" value="<%= escape_html(params[:vanityname]) %>"
+          <input id="big" type="text" value="<%= escape_html(params[:vanityname]) %>"
             name="vanityname" id="vanityname" placeholder="foo" class="span4 text" />
         </div>
       </div>
@@ -70,7 +70,7 @@
       <div class="row important-form-field">
         <div class="span12">
           <label for="name">Name</label>
-          <input type="text" id="name" name="name" />
+          <input id="big" type="text" id="name" name="name" />
         </div>
       </div>
 
