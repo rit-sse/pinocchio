@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'rack/csrf'
 
 class Pinocchio < Sinatra::Base
   require 'redis'
@@ -11,11 +12,16 @@ class Pinocchio < Sinatra::Base
 
   configure do
     register Sinatra::Flash
+    use Rack::Csrf, :raise => true
   end
 
   helpers do
     include Rack::Utils
     include Helpers::All
+
+    def csrf_tag
+      Rack::Csrf.csrf_tag(env)
+    end
   end
 
   get "/" do

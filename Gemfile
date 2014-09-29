@@ -5,6 +5,7 @@ gem 'redis'
 gem 'sinatra-flash'
 gem 'redis-rack'
 gem 'net-ldap'
+gem 'rack_csrf'
 
 group :production do
   gem 'unicorn'
