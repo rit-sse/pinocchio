@@ -96,42 +96,45 @@ class Pinocchio < Sinatra::Base
   end
 
   post '/' do
-    if !params[:name].to_s.empty?
-      fl.now[:error] = "Stop spamming"
-    else
+    if signed_in?
+      if !params[:name].to_s.empty?
+        fl.now[:error] = "Stop spamming"
+      else
 
-      unless params[:url].to_s.empty?
-        full_url = params[:url].strip
-        valid_id = true
+        unless params[:url].to_s.empty?
+          full_url = params[:url].strip
+          valid_id = true
 
-        # grab or generate link id
-        unless params[:vanityname].to_s.empty?
-          linkid = params[:vanityname].strip
+          # grab or generate link id
+          unless params[:vanityname].to_s.empty?
+            linkid = params[:vanityname].strip
 
-          # validate vanity names
-          valid_id = linkid.match /^[\w-]+$/i
-        else
-          linkid = random_id 5
-        end
-
-        if valid_id
-          # set if key doesn't already exist
-          result = $redis.setnx link_key(linkid), full_url
-
-          if result
-            # add link to session
-            add_link linkid
-            fl.now[:success] = "Shortlink created."
+            # validate vanity names
+            valid_id = linkid.match /^[\w-]+$/i
           else
-            fl.now[:error] = "Key already exists. Make sure your vanity name is unique."
+            linkid = random_id 5
           end
-        else
-          fl.now[:error] = "Invalid vanity name. Must contain only alphanumeric characters, dashes, and underscores."
+
+          if valid_id
+            # set if key doesn't already exist
+            result = $redis.setnx link_key(linkid), full_url
+
+            if result
+              # add link to session
+              add_link linkid
+              fl.now[:success] = "Shortlink created."
+            else
+              fl.now[:error] = "Key already exists. Make sure your vanity name is unique."
+            end
+          else
+            fl.now[:error] = "Invalid vanity name. Must contain only alphanumeric characters, dashes, and underscores."
+          end
         end
+
       end
-
+    else
+      fl.now[:error] = "You must be logged in"
     end
-
     erb :index
   end
 
