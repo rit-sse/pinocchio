@@ -17,7 +17,6 @@
   <script type="text/javascript" src="<%= url "/javascripts/jquery_ujs.js" %>"></script>
   <script type="text/javascript" src="<%= url "/javascripts/bootstrap.min.js" %>"></script>
   <script type="text/javascript" src="<%= url "/javascripts/app.js" %>"></script>
-
   <title>Pinocchio</title>
 </head>
 <body>
@@ -97,7 +96,13 @@
             <td><a href="<%= full_url %>"><%= full_url %></a></td>
             <td class="right"><%= clicks_for_linkid linkid %></td>
             <% if signed_in? %>
-            <td class="action-column"><a class="btn btn-danger btn-small" rel="nofollow" href="<%= url "/#{linkid}/delete" %>" data-method="delete" data-confirm="Are you sure?">Delete</a></td>
+            <td class="action-column">
+              <form action="<%= url "/#{linkid}/delete" %>" method="post">
+                <input name="_method" type="hidden" value="delete" />
+                <%= csrf_tag %>
+                <button type="submit" class="btn btn-danger btn-small" data-confirm="Are you sure?">Delete</button>
+              </form>
+            </td>
             <% end %>
           </tr>
         <% end %>
