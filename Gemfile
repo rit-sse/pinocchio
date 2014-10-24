@@ -1,11 +1,10 @@
 source 'http://rubygems.org'
 
-gem 'sinatra', require: "sinatra/base"
+gem 'sinatra', '~>1.4', require: "sinatra/base"
 gem 'redis'
 gem 'sinatra-flash'
 gem 'redis-rack'
 gem 'net-ldap'
-gem 'rack_csrf'
 
 group :production do
   gem 'unicorn'

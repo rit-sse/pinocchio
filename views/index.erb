@@ -23,12 +23,12 @@
   <div class="container">
     <% if signed_in? %>
       <form method="post" class="form-inline pull-right" style="margin: 30px;" action="/go/logout">
-        <%= csrf_tag %>
+        <input name="authenticity_token" value="<%= session[:csrf] %>" type="hidden" />
         <button type="submit" id="submit" class="btn">Sign Out</button>
       </form>
     <% else %>
       <form method="post" class="form-inline pull-right" style="margin: 30px;" action="/go/auth">
-        <%= csrf_tag %>
+        <input name="authenticity_token" value="<%= session[:csrf] %>" type="hidden" />
         <input type="text" class="input-small" placeholder="Username" name="username" id="username">
         <input type="password" class="input-small" placeholder="Password" name="password" id="password">
         <button type="submit" id="submit" class="btn">Sign in</button>
@@ -48,7 +48,7 @@
 
 
     <form method="post">
-      <%= csrf_tag %>
+      <input name="authenticity_token" value="<%= session[:csrf] %>" type="hidden" />
       <div class="row">
         <div class="span8">
           <label for="url">URL to shorten</label>
@@ -99,7 +99,7 @@
             <td class="action-column">
               <form action="<%= url "/#{linkid}/delete" %>" method="post">
                 <input name="_method" type="hidden" value="delete" />
-                <%= csrf_tag %>
+                <input name="authenticity_token" value="<%= session[:csrf] %>" type="hidden" />
                 <button type="submit" class="btn btn-danger btn-small" data-confirm="Are you sure?">Delete</button>
               </form>
             </td>
