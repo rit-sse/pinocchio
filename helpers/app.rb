@@ -19,7 +19,7 @@ module Helpers
 
     def next_page_url
       return "#" if next_page_url_disabled?
-      return url_for_paginated_page(params[:page].to_i + 1) if params[:pgae].to_i != 0
+      return url_for_paginated_page(params[:page].to_i + 1) if params[:page].to_i != 0
       url_for_paginated_page(2)
     end
 
