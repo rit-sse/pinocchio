@@ -103,7 +103,7 @@ class Pinocchio < Sinatra::Base
 
           # grab or generate link id
           unless params[:vanityname].to_s.empty?
-            linkid = params[:vanityname].strip
+            linkid = params[:vanityname].strip.downcase
 
             # validate vanity names
             valid_id = linkid.match /^[\w-]+$/i
@@ -135,7 +135,7 @@ class Pinocchio < Sinatra::Base
   end
 
   get '/:linkid' do
-    @url = url_for_linkid params[:linkid]
+    @url = url_for_linkid params[:linkid].downcase
 
     if @url
       $redis.incr stat_key(params[:linkid])
